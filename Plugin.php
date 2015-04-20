@@ -27,4 +27,24 @@ class Plugin extends PluginBase
             'icon' => 'icon-leaf'
         ];
     }
+
+    public function boot()
+    {
+        // extend Rainlab.User model
+        \RainLab\User\Models\User::extend(function ($model) {
+            $model->belongsToMany['posts'] = [
+                'RainLab\Blog\Models\Post',
+                'table' => 'riuson_blogfrontend_blog_post_users',
+                'other_key' => 'post_id'
+            ];
+        });
+        // extend Rainlab.Blog model
+        \RainLab\Blog\Models\Post::extend(function ($model) {
+            $model->belongsTo['user'] = [
+                'RainLab\User\Models\User',
+                'table' => 'riuson_blogfrontend_blog_post_users',
+                'other_key' => 'user_id'
+            ];
+        });
+    }
 }
