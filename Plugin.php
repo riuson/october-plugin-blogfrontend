@@ -28,6 +28,13 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerComponents()
+    {
+        return [
+            'Riuson\BlogFrontEnd\Components\PostEditor' => 'postEditor'
+        ];
+    }
+
     public function boot()
     {
         // extend Rainlab.User model
