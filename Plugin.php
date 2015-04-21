@@ -47,7 +47,7 @@ class Plugin extends PluginBase
         });
         // extend Rainlab.Blog model
         \RainLab\Blog\Models\Post::extend(function ($model) {
-            $model->belongsTo['user'] = [
+            $model->belongsTo['frontend_user'] = [
                 'RainLab\User\Models\User',
                 'table' => 'riuson_blogfrontend_blog_post_users',
                 'other_key' => 'user_id'

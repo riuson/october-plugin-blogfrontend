@@ -1,3 +1,101 @@
-<p>This is the default markup for component PostEditor</p>
-
-<small>You can delete this file if you want</small>
+<form
+	onsubmit="$(this).request('onSubmit', {
+		success: function(data) {
+				$('#div_post_result').html(data.errorText);
+			}
+		});return false;"
+	>
+	<input
+		type="hidden"
+		id="originalSlug"
+		name="input-original-slug"
+		{% if __SELF__.post is defined and __SELF__.post is not null %}
+		value="{{ post.slug }}"
+		{% endif %}
+	>
+	<div class="form-group" id="div_title">
+		<label for="title">Title</label>
+		<input
+			type="text"
+			class="form-control"
+			id="title"
+			name="input-title"
+			class="form-control"
+			placeholder="Title for the post"
+			{% if __SELF__.post is defined and __SELF__.post is not null %}
+			value="{{ post.title }}"
+			{% endif %}
+			onblur="$(this).request('onCheckTitle', {
+        		success: function(data){
+            			$('#input-slug').val(data.slug);
+            			
+        				if (data.titleValid) {
+            				$('#div_title').removeClass('has-error');
+        				} else {
+        					$('#div_title').addClass('has-error');
+        				}
+            			
+        				if (data.slugValid) {
+            				$('#div_slug').removeClass('has-error');
+        				} else {
+        					$('#div_slug').addClass('has-error');
+        				}
+        			}
+   			}); return false;"
+		>
+	</div>
+	<div class="form-group" id="div_slug">
+		<label for="slug">Slug</label>
+		<input
+			type="text"
+			class="form-control"
+			id="input-slug"
+			name="input-slug"
+			class="form-control"
+			placeholder="Slug for the post"
+			{% if __SELF__.post is defined and __SELF__.post is not null %}
+			value="{{ post.slug }}"
+			{% endif %}
+			onblur="$(this).request('onCheckSlug', {
+        		success: function(data){
+        				if (data.slugValid) {
+            				$('#div_slug').removeClass('has-error');
+        				} else {
+        					$('#div_slug').addClass('has-error');
+        				}
+        			}
+   			}); return false;"
+		>
+	</div>
+	<div class="form-group">
+		<label for="excerpt">Excerpt</label>
+		<textarea
+			id="excerpt"
+			name="input-excerpt"
+			class="form-control"
+			rows="3"
+			style="resize: vertical;"
+		>{% if __SELF__.post is defined and __SELF__.post is not null %}{{ post.excerpt|raw }}{% endif %}
+		</textarea>
+	</div>
+	<div class="form-group">
+		<label for="content">Content</label>
+		<textarea
+			id="content"
+			name="input-content"
+			class="form-control"
+			rows="10"
+			style="resize: vertical;"
+		>{% if __SELF__.post is defined and __SELF__.post is not null %}{{ post.content|raw }}{% endif %}
+		</textarea>
+	</div>
+	<div class="form-group">
+		<button
+			type="submit"
+			class="btn btn-default"
+		>Submit</button>
+	</div>
+	<div class="form-group">
+		<p class="bg-warning" id="div_post_result"></p>
+	</div>
+</form>
