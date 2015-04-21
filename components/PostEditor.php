@@ -36,65 +36,97 @@ class PostEditor extends \RainLab\Blog\Components\Post
         return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
-    public function onRun()
+    public function init()
     {
         $this->categoryPage = $this->page['categoryPage'] = $this->property('categoryPage');
         $this->post = $this->page['post'] = $this->loadPost();
+        $this->errorText = null;
+
+        $this->post_slug = null;
+        $this->post_title = null;
+        $this->post_excerpt = null;
+        $this->post_content = null;
+
+        if ($this->post != null) {
+            $this->post_slug = $this->post->slug;
+            $this->post_title = $this->post->title;
+            $this->post_excerpt = $this->post->excerpt;
+            $this->post_content = $this->post->content;
+        }
     }
 
     public function onSubmit()
     {
-        $redirect = $this->property('redirectOnPost');
         $success = false;
-        $errorText = '';
 
-        $originalSlug = post('input-original-slug', '');
-        $excerpt = post('input-excerpt', '');
-        $content = post('input-content', '');
-        $title = post('input-title', '');
-        $slug = post('input-slug', '');
+        $this->post_slug = $slug = post('input-slug', '');
+        $this->post_title = $title = post('input-title', '');
+        $this->post_excerpt = $excerpt = post('input-excerpt', '');
+        $this->post_content = $content = post('input-content', '');
 
-        if (empty($originalSlug)) {
-            $now = Carbon::now('UTC');
-
-            if (!empty($slug)) {
-                if ($this->isSlugUnique($slug)) {
-                    $post = new PostModel();
-                    $post->user_id = null;
-                    $post->title = $title;
-                    $post->slug = $slug;
-                    $post->excerpt = $excerpt;
-                    $post->content = $content;
-
-                    $post->published_at = $now;
-                    $post->published = 1;
-
-                    if ($post->save()) {
-                        $postuser = new BlogPostUserModel();
-                        $postuser->user_id = \Auth::getUser()->getKey();
-                        $postuser->post_id = $post->getKey();
-
-                        if ($postuser->save()) {
-                            $success = true;
-                            return \Redirect::to($redirect);
-                        } else {
-                            $errorText = 'Assign user to post failed.';
-                        }
-                    } else {
-                        $errorText = 'Saving post failed.';
-                    }
-                } else {
-                    $errorText = 'Slug not unique.';
-                }
-            } else {
-                $errorText = 'Slug is empty.';
-            }
+        if (empty($slug)) {
+            $this->post_slug = $slug = \Str::slug($title);
         }
 
-        return [
-            'success' => $success,
-            'errorText' => $errorText
-        ];
+        if ($this->post == null) {
+            return $this->createNewPost($slug, $title, $excerpt, $content);
+        } else {
+            return $this->updateExistingPost($slug, $title, $excerpt, $content);
+        }
+    }
+
+    private function createNewPost($slug, $title, $excerpt, $content)
+    {
+        if (! empty($slug)) {
+            if ($this->isSlugUnique($slug)) {
+                $post = new PostModel();
+                $post->user_id = null;
+                $post->title = $title;
+                $post->slug = $slug;
+                $post->excerpt = $excerpt;
+                $post->content = $content;
+                $post->published_at = Carbon::now('UTC');
+                $post->published = 1;
+
+                if ($post->save()) {
+                    $postuser = new BlogPostUserModel();
+                    $postuser->user_id = \Auth::getUser()->getKey();
+                    $postuser->post_id = $post->getKey();
+
+                    if ($postuser->save()) {
+                        $success = true;
+                        $redirect = $this->property('redirectOnPost');
+                        return \Redirect::to($redirect);
+                    } else {
+                        $this->errorText = 'Assign user to post failed.';
+                    }
+                } else {
+                    $this->errorText = 'Saving post failed.';
+                }
+            } else {
+                $this->errorText = 'Slug not unique.';
+            }
+        } else {
+            $this->errorText = 'Slug is empty.';
+        }
+    }
+
+    private function updateExistingPost($slug, $title, $excerpt, $content)
+    {
+        if (($this->post->slug != $slug) and (! $this->isSlugUnique($slug))) {
+            $this->errorText = 'Slug not unique.';
+            return;
+        }
+
+        $this->post->slug = $slug;
+        $this->post->title = $title;
+        $this->post->excerpt = $excerpt;
+        $this->post->content = $content;
+
+        if ($this->post->save()) {
+            $redirect = $this->property('redirectOnPost');
+            return \Redirect::to($redirect);
+        }
     }
 
     private function isSlugUnique($slug)
