@@ -28,3 +28,9 @@
     {% endif %}
     on {{ post.published_at|date('M d, Y') }}
 </p>
+
+{% if __SELF__.pageEditor is not null %}
+<p>
+    <a href="{{ __SELF__.pageEditor }}">Edit</a>
+</p>
+{% endif %}
