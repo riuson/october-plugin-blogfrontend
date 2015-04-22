@@ -48,6 +48,8 @@ class PostEditor extends \RainLab\Blog\Components\Post
         $this->post_excerpt = null;
         $this->post_content = null;
         $this->selected_categories = null;
+        $this->frontend_user = null;
+        $this->allow_editing = true;
 
         if ($this->post != null) {
             $this->post_slug = $this->post->slug;
@@ -62,6 +64,15 @@ class PostEditor extends \RainLab\Blog\Components\Post
             }
 
             $this->selected_categories = $categories;
+            $this->frontend_user = $this->post->frontend_user->first();
+
+            if ($this->frontend_user != null) {
+                if ($this->frontend_user->getKey() != \Auth::getUser()->getKey()) {
+                    $this->allow_editing = false;
+                }
+            } else {
+                $this->allow_editing = false;
+            }
         }
 
         $this->categories = CategoryModel::orderBy('name', 'asc')->get();
@@ -70,6 +81,11 @@ class PostEditor extends \RainLab\Blog\Components\Post
     public function onSubmit()
     {
         $success = false;
+
+        if ($this->allow_editing == false) {
+            $redirect = $this->property('redirectOnPost');
+            return \Redirect::to($redirect);
+        }
 
         $this->post_slug = $slug = post('input-slug', '');
         $this->post_title = $title = post('input-title', '');
@@ -130,6 +146,13 @@ class PostEditor extends \RainLab\Blog\Components\Post
         if (($this->post->slug != $slug) and (! $this->isSlugUnique($slug))) {
             $this->errorText = 'Slug not unique.';
             return;
+        }
+
+        if ($this->frontend_user != null) {
+            if ($this->frontend_user->getKey() != \Auth::getUser()->getKey()) {
+                $this->errorText = 'Only author can edit this blog post.';
+                return;
+            }
         }
 
         $this->post->slug = $slug;

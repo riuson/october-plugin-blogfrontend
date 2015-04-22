@@ -42,14 +42,16 @@ class Plugin extends PluginBase
             $model->belongsToMany['posts'] = [
                 'RainLab\Blog\Models\Post',
                 'table' => 'riuson_blogfrontend_blog_post_users',
+                'key' => 'user_id',
                 'other_key' => 'post_id'
             ];
         });
         // extend Rainlab.Blog model
         \RainLab\Blog\Models\Post::extend(function ($model) {
-            $model->belongsTo['frontend_user'] = [
+            $model->belongsToMany['frontend_user'] = [
                 'RainLab\User\Models\User',
                 'table' => 'riuson_blogfrontend_blog_post_users',
+                'key' => 'post_id',
                 'other_key' => 'user_id'
             ];
         });

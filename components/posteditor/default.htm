@@ -1,5 +1,9 @@
+{% if __SELF__.allow_editing %}
 <form
 	id="form_post"
 	data-request="onSubmit"
 	data-request-update="'{{ __SELF__ }}::post_form': '#form_post'"
 >{% partial __SELF__ ~"::post_form" %}</form>
+{% else %}
+Only author can edit this post.
+{% endif %}
