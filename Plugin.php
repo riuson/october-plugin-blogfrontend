@@ -31,7 +31,8 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            'Riuson\BlogFrontEnd\Components\PostEditor' => 'postEditor'
+            'Riuson\BlogFrontEnd\Components\PostEditor' => 'postEditor',
+            'Riuson\BlogFrontEnd\Components\PostViewer' => 'postViewer'
         ];
     }
 
