@@ -43,8 +43,19 @@ class PostViewer extends \RainLab\Blog\Components\Post
         if ($this->post != null) {
             $frontend_user = $this->post->frontend_user->first();
 
+
+
             if ($frontend_user != null) {
                 $this->post_user_name = $frontend_user->name;
+                $allow_editing = false;
+
+                $user = \Auth::getUser();
+
+                if ($user != null) {
+                    if ($frontend_user->getKey() == $user->getKey()) {
+                        $allow_editing = true;
+                    }
+                }
 
                 if ($frontend_user->key != null) {
                     if ($frontend_user->key->primaryCharacter() != null) {
@@ -52,7 +63,9 @@ class PostViewer extends \RainLab\Blog\Components\Post
                     }
                 }
 
-                $this->pageEditor = $this->controller->pageUrl($this->property('pageEditor'));
+                if ($allow_editing) {
+                    $this->pageEditor = $this->controller->pageUrl($this->property('pageEditor'));
+                }
             }
         }
 
