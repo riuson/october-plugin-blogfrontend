@@ -33,6 +33,32 @@ class CategoriesViewer extends \RainLab\Blog\Components\Categories
 
         $categories = BlogCategoryModel::whereNotIn('id', $blockedCategories)->orderBy('name');
 
+        /*
+         * Possible query to get categories and available posts count
+         *
+         * select `rainlab_blog_categories`.*,
+         * (
+         * select count(*) from `rainlab_blog_posts`
+         * left join `rainlab_blog_posts_categories` on `rainlab_blog_posts_categories`.`post_id` = `rainlab_blog_posts`.`id`
+         * where `rainlab_blog_posts`.`id` not in (
+         * select `post_id` from `rainlab_blog_posts_categories`
+         * where `category_id` in (4, 5)
+         * )
+         * and
+         * `rainlab_blog_posts_categories`.`category_id` = `rainlab_blog_categories`.`id`
+         *
+         * ) as `related_count`
+         * from `rainlab_blog_categories`
+         * where `id` not in (5, 4) and exists (
+         * select 1
+         * from `rainlab_blog_posts_categories`
+         * inner join `rainlab_blog_posts` on `rainlab_blog_posts`.`id` = `rainlab_blog_posts_categories`.`post_id`
+         * where `rainlab_blog_posts`.`published` is not null
+         * and `rainlab_blog_posts`.`published` = 1
+         * and rainlab_blog_categories.id = rainlab_blog_posts_categories.category_id
+         * ) order by `name` asc
+         */
+
         if (! $this->property('displayEmpty')) {
             $categories->whereExists(function ($query) {
                 $query->select(\Db::raw(1))
@@ -45,12 +71,28 @@ class CategoriesViewer extends \RainLab\Blog\Components\Categories
         }
 
         $categories = $categories->get();
+
         /*
          * Add a "url" helper attribute for linking to each category
          */
         $categories->each(function ($category) {
             $category->setUrl($this->categoryPage, $this->controller);
         });
+
+        // get posts count
+        $counts = \DB::table('rainlab_blog_posts')->select('rainlab_blog_posts_categories.category_id', \DB::raw('count(*) as posts_count'))
+            ->from('rainlab_blog_posts')
+            ->leftJoin('rainlab_blog_posts_categories', 'rainlab_blog_posts_categories.post_id', '=', 'rainlab_blog_posts.id')
+            ->whereNotIn('rainlab_blog_posts.id', function ($query) use($blockedCategories) {
+            $query->select('post_id')
+                ->from('rainlab_blog_posts_categories')
+                ->whereIn('category_id', $blockedCategories);
+        })
+            ->groupBy('rainlab_blog_posts_categories.category_id')
+            ->lists('posts_count', 'category_id');
+
+        $this->posts_count = $counts;
+
         return $categories;
     }
 }

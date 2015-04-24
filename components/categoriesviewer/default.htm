@@ -1,9 +1,10 @@
 {% set categories = __SELF__.categories %}
+{% set posts_count = __SELF__.posts_count %}
 {% set currentCategorySlug = __SELF__.currentCategorySlug %}
 
 <ul class="category-list">
     {% for category in categories %}
-        {% set postCount = category.post_count %}
+        {% set postCount = posts_count[category.id] %}
         <li {% if category.slug == currentCategorySlug %}class="active"{% endif %}>
             <a href="{{ category.url }}">{{ category.name }}</a> 
             {% if postCount %}
