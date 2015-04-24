@@ -71,10 +71,10 @@ class PostsViewer extends \RainLab\Blog\Components\Posts
         /*
          * List all accessible posts, eager load their categories
          */
-        $posts = PostModel::with('categories')->whereIn('id', function ($query) use($blockedCategories) {
+        $posts = PostModel::with('categories')->whereNotIn('id', function ($query) use($blockedCategories) {
             $query->select('post_id')
                 ->from('rainlab_blog_posts_categories')
-                ->whereNotIn('category_id', $blockedCategories);
+                ->whereIn('category_id', $blockedCategories);
         })
             ->listFrontEnd([
             'page' => $this->property('pageNumber'),
