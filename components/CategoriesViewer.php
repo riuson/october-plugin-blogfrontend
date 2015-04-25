@@ -20,13 +20,13 @@ class CategoriesViewer extends \RainLab\Blog\Components\Categories
         $userGroups = \Riuson\ACL\Classes\Acl::userGroups();
 
         $blockedCategories = \DB::table('rainlab_blog_categories')->whereIn('rainlab_blog_categories.id', function ($query) {
-            $query->select('riuson_eveapiuser_blog_category_groups.category_id')
-                ->from('riuson_eveapiuser_blog_category_groups');
+            $query->select('riuson_blogfrontend_blog_category_groups.category_id')
+                ->from('riuson_blogfrontend_blog_category_groups');
         })
             ->whereNotIn('rainlab_blog_categories.id', function ($query2) use($userGroups) {
-            $query2->select('riuson_eveapiuser_blog_category_groups.category_id')
-                ->from('riuson_eveapiuser_blog_category_groups')
-                ->leftJoin('riuson_acl_groups', 'riuson_acl_groups.id', '=', 'riuson_eveapiuser_blog_category_groups.group_id')
+            $query2->select('riuson_blogfrontend_blog_category_groups.category_id')
+                ->from('riuson_blogfrontend_blog_category_groups')
+                ->leftJoin('riuson_acl_groups', 'riuson_acl_groups.id', '=', 'riuson_blogfrontend_blog_category_groups.group_id')
                 ->whereIn('riuson_acl_groups.name', $userGroups); // ['academy']
         })
             ->lists('rainlab_blog_categories.id');

@@ -11,7 +11,7 @@ class Plugin extends PluginBase
 
     public $require = [
         'RainLab.Blog',
-        'Riuson.BlogFrontEnd'
+        'Riuson.ACL'
     ];
 
     /**
@@ -58,6 +58,30 @@ class Plugin extends PluginBase
                 'key' => 'post_id',
                 'other_key' => 'user_id'
             ];
+        });
+
+        \RainLab\Blog\Models\Category::extend(function ($model) {
+            $model->belongsToMany['groups'] = [
+                'Riuson\ACL\Models\Group',
+                'table' => 'riuson_blogfrontend_blog_category_groups',
+                'other_key' => 'group_id'
+            ];
+        });
+
+        \Event::listen('backend.form.extendFields', function ($widget) {
+            if (! $widget->getController() instanceof \RainLab\Blog\Controllers\Categories)
+                return;
+            if (! $widget->model instanceof \RainLab\Blog\Models\Category)
+                return;
+
+            $widget->addFields([
+                'groups' => [
+                    'label' => 'Groups',
+                    'commentAbove' => 'Specify which groups can view posts in this category.',
+                    'tab' => 'Groups',
+                    'type' => 'relation'
+                ]
+            ], 'primary');
         });
     }
 }
