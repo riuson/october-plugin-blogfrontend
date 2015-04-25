@@ -11,7 +11,8 @@ class Plugin extends PluginBase
 
     public $require = [
         'RainLab.Blog',
-        'Riuson.ACL'
+        'Riuson.ACL',
+        'Riuson.EveIGB'
     ];
 
     /**
