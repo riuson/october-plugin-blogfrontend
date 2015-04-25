@@ -18,9 +18,9 @@
             </p>
 
             {% if post.excerpt %}
-                <p class="excerpt">{{ post.excerpt }}</p>
+                <p class="excerpt">{{ post.excerpt|evelinks }}</p>
             {% else %}
-                <div class="content">{{ post.content_html|raw }}</div>
+                <div class="content">{{ post.content_html|raw|evelinks }}</div>
             {% endif %}
         </li>
     {% else %}
