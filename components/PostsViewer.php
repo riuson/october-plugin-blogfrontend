@@ -15,9 +15,39 @@ class PostsViewer extends \RainLab\Blog\Components\Posts
         ];
     }
 
+    public function defineProperties()
+    {
+        $result = parent::defineProperties();
+        $result['showPager'] = [
+            'description' => 'Show page navigation',
+            'title' => 'Show pager',
+            'type' => 'dropdown',
+            'default' => 'hide',
+            'options' => [
+                'hide' => 'Hide navigation',
+                'show' => 'Show navigation'
+            ]
+        ];
+        return $result;
+    }
+
     public function onRun()
     {
         parent::onRun();
+
+        $this->showPager = $this->property('showPager', 'hide') === 'show';
+
+        /*
+         * If the page number is not valid, redirect
+         */
+        if ($pageNumberParam = $this->paramName('pageNumber')) {
+            $currentPage = $this->property('pageNumber');
+
+            if ($currentPage > ($lastPage = $this->posts->lastPage()) && $currentPage > 1)
+                return Redirect::to($this->currentPageUrl([
+                    $pageNumberParam => $lastPage
+                ]));
+        }
 
         $this->authors = array();
 
