@@ -1,6 +1,6 @@
 {% set post = __SELF__.post %}
 
-<div class="content">{{ post.content_html|raw }}</div>
+<div class="content">{{ post.content_html|raw|evelinks }}</div>
 
 {% if post.featured_images.count %}
     <div class="featured-images text-center">

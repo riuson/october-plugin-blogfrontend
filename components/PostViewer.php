@@ -39,6 +39,7 @@ class PostViewer extends \RainLab\Blog\Components\Post
 
         $this->post_user_name = null;
         $this->pageEditor = null;
+        $allow_editing = false;
 
         if ($this->post != null) {
             $frontend_user = $this->post->frontend_user->first();
@@ -47,7 +48,6 @@ class PostViewer extends \RainLab\Blog\Components\Post
 
             if ($frontend_user != null) {
                 $this->post_user_name = $frontend_user->name;
-                $allow_editing = false;
 
                 $user = \Auth::getUser();
 
@@ -69,5 +69,11 @@ class PostViewer extends \RainLab\Blog\Components\Post
             }
         }
 
+        if ($allow_editing == false) {
+            if (\Riuson\EveApiUser\Classes\AccessControl::userCanViewPost($this->post) == false) {
+                $this->post = $this->page['post'] = null;
+                return \Redirect::guest("/");
+            }
+        }
     }
 }

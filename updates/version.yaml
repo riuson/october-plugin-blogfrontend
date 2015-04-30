@@ -2,3 +2,6 @@
 1.0.2:
     - Added table for post-to-user relation.
     - create_blog_post_users_table.php
+1.0.3:
+    - Added table for category-to-groups
+    - create_blog_category_groups_table.php

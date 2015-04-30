@@ -18,9 +18,9 @@
             </p>
 
             {% if post.excerpt %}
-                <p class="excerpt">{{ post.excerpt }}</p>
+                <p class="excerpt">{{ post.excerpt|evelinks }}</p>
             {% else %}
-                <div class="content">{{ post.content_html|raw }}</div>
+                <div class="content">{{ post.content_html|raw|evelinks }}</div>
             {% endif %}
         </li>
     {% else %}
@@ -28,7 +28,7 @@
     {% endfor %}
 </ul>
 
-{% if posts.lastPage > 1 %}
+{% if posts.lastPage > 1 and __SELF__.showPager %}
     <ul class="pagination">
         {% if posts.currentPage > 1 %}
             <li><a href="{{ this.page.baseFileName|page({ (pageParam): (posts.currentPage-1) }) }}">&larr; Prev</a></li>
