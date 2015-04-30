@@ -17,20 +17,20 @@
 {% endif %}
 
 <p class="info">
-    Posted
+    {{ 'riuson.blogfrontend::lang.post_viewer.posted'|trans }}
     {% if __SELF__.post_user_name is not null %}
-    by {{ __SELF__.post_user_name }}
+    {{ 'riuson.blogfrontend::lang.post_viewer.by_user'|trans }} {{ __SELF__.post_user_name }}
     {% endif %}
-    {% if post.categories.count %} in
+    {% if post.categories.count %} {{ 'riuson.blogfrontend::lang.post_viewer.in_category'|trans }}
         {% for category in post.categories %}
             <a href="{{ category.url }}">{{ category.name }}</a>{% if not loop.last %}, {% endif %}
         {% endfor %}
     {% endif %}
-    on {{ post.published_at|date('M d, Y') }}
+    {{ 'riuson.blogfrontend::lang.post_viewer.published_at'|trans }} {{ post.published_at|date('M d, Y') }}
 </p>
 
 {% if __SELF__.pageEditor is not null %}
 <p>
-    <a href="{{ __SELF__.pageEditor }}">Edit</a>
+    <a href="{{ __SELF__.pageEditor }}">{{ 'riuson.blogfrontend::lang.post_viewer.edit'|trans }}</a>
 </p>
 {% endif %}

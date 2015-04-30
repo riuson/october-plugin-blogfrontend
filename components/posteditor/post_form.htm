@@ -2,14 +2,14 @@
 	class="form-group"
 	id="div_title"
 >
-	<label for="title">Title</label>
+	<label for="title">{{ 'riuson.blogfrontend::lang.post_editor.title'|trans }}</label>
 	<input
 		type="text"
 		class="form-control"
 		id="title"
 		name="input-title"
 		class="form-control"
-		placeholder="Title for the post"
+		placeholder="{{ 'riuson.blogfrontend::lang.post_editor.title_placeholder'|trans }}"
 		{% if __SELF__.post_excerpt is not null %}
 			value="{{ __SELF__.post_title }}"
 		{% endif %}
@@ -19,21 +19,21 @@
 	class="form-group"
 	id="div_slug"
 >
-	<label for="slug">Slug</label>
+	<label for="slug">{{ 'riuson.blogfrontend::lang.post_editor.slug'|trans }}</label>
 	<input
 		type="text"
 		class="form-control"
 		id="input-slug"
 		name="input-slug"
 		class="form-control"
-		placeholder="Slug for the post"
+		placeholder="{{ 'riuson.blogfrontend::lang.post_editor.slug_placeholder'|trans }}"
 		{% if __SELF__.post_excerpt is not null %}
 			value="{{ __SELF__.post_slug }}"
 		{% endif %}
 	>
 </div>
 <div class="form-group">
-	<label for="excerpt">Excerpt</label>
+	<label for="excerpt">{{ 'riuson.blogfrontend::lang.post_editor.excerpt'|trans }}</label>
 	<textarea
 		id="excerpt"
 		name="input-excerpt"
@@ -44,7 +44,7 @@
 	</textarea>
 </div>
 <div class="form-group">
-	<label for="content">Content</label>
+	<label for="content">{{ 'riuson.blogfrontend::lang.post_editor.content'|trans }}</label>
 	<textarea
 		id="content"
 		name="input-content"
@@ -71,7 +71,7 @@
 	<button
 		type="submit"
 		class="btn btn-default"
-	>Submit</button>
+	>{{ 'riuson.blogfrontend::lang.post_editor.submit'|trans }}</button>
 </div>
 <div class="form-group">
 	<p

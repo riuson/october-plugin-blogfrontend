@@ -15,8 +15,8 @@ class PostEditor extends \RainLab\Blog\Components\Post
     public function componentDetails()
     {
         return [
-            'name' => 'Post Editor',
-            'description' => 'Front-End post editor.'
+            'name' => 'riuson.blogfrontend::lang.post_editor.name',
+            'description' => 'riuson.blogfrontend::lang.post_editor.description'
         ];
     }
 
@@ -24,10 +24,10 @@ class PostEditor extends \RainLab\Blog\Components\Post
     {
         $result = parent::defineProperties();
         $result['redirectOnPost'] = [
-            'title' => 'Post redirect',
-            'description' => 'Redirect after successful posting',
+            'title' => 'riuson.blogfrontend::lang.post_editor.redirectonpost_title',
+            'description' => 'riuson.blogfrontend::lang.post_editor.redirectonpost_description',
             'type' => 'dropdown',
-            'default' => 'blog'
+            'default' => ''
         ];
         return $result;
     }
@@ -128,29 +128,29 @@ class PostEditor extends \RainLab\Blog\Components\Post
                         $redirect = $this->property('redirectOnPost');
                         return \Redirect::to($redirect);
                     } else {
-                        $this->errorText = 'Assign user to post failed.';
+                        $this->errorText = 'riuson.blogfrontend::lang.post_editor.error_user_assign_failed';
                     }
                 } else {
-                    $this->errorText = 'Saving post failed.';
+                    $this->errorText = 'riuson.blogfrontend::lang.post_editor.error_save_post_failed';
                 }
             } else {
-                $this->errorText = 'Slug not unique.';
+                $this->errorText = 'riuson.blogfrontend::lang.post_editor.error_slug_not_unique';
             }
         } else {
-            $this->errorText = 'Slug is empty.';
+            $this->errorText = 'riuson.blogfrontend::lang.post_editor.error_slug_is_empty';
         }
     }
 
     private function updateExistingPost($slug, $title, $excerpt, $content, $categories)
     {
         if (($this->post->slug != $slug) and (! $this->isSlugUnique($slug))) {
-            $this->errorText = 'Slug not unique.';
+            $this->errorText = 'riuson.blogfrontend::lang.post_editor.error_slug_not_unique';
             return;
         }
 
         if ($this->frontend_user != null) {
             if ($this->frontend_user->getKey() != \Auth::getUser()->getKey()) {
-                $this->errorText = 'Only author can edit this blog post.';
+                $this->errorText = 'riuson.blogfrontend::lang.post_editor.error_editing_forbidden';
                 return;
             }
         }

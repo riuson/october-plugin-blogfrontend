@@ -10,8 +10,8 @@ class CategoriesViewer extends \RainLab\Blog\Components\Categories
     public function componentDetails()
     {
         return [
-            'name' => 'Categories Viewer',
-            'description' => 'Lists categories with access rights'
+            'name' => 'riuson.blogfrontend::lang.categories_viewer.name',
+            'description' => 'riuson.blogfrontend::lang.categories_viewer.description'
         ];
     }
 

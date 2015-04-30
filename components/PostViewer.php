@@ -11,8 +11,8 @@ class PostViewer extends \RainLab\Blog\Components\Post
     public function componentDetails()
     {
         return [
-            'name' => 'Post Viewer',
-            'description' => 'Frontend single post viewer'
+            'name' => 'riuson.blogfrontend::lang.post_viewer.name',
+            'description' => 'riuson.blogfrontend::lang.post_viewer.description'
         ];
     }
 
@@ -20,8 +20,8 @@ class PostViewer extends \RainLab\Blog\Components\Post
     {
         $result = parent::defineProperties();
         $result['pageEditor'] = [
-            'title' => 'Editor page',
-            'description' => 'Page for post editing',
+            'title' => 'riuson.blogfrontend::lang.post_viewer.pageeditor_title',
+            'description' => 'riuson.blogfrontend::lang.post_viewer.pageeditor_description',
             'type' => 'dropdown',
             'default' => ''
         ];
