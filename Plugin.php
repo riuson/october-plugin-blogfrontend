@@ -23,8 +23,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name' => 'Blog Front-End',
-            'description' => 'Front-End interface for RainLab.Blog.',
+            'name' => 'riuson.blogfrontend::lang.plugin.name',
+            'description' => 'riuson.blogfrontend::lang.plugin.description',
             'author' => 'Riuson',
             'icon' => 'icon-leaf'
         ];
@@ -77,9 +77,9 @@ class Plugin extends PluginBase
 
             $widget->addFields([
                 'groups' => [
-                    'label' => 'Groups',
-                    'commentAbove' => 'Specify which groups can view posts in this category.',
-                    'tab' => 'Groups',
+                    'label' => 'riuson.blogfrontend::lang.backend.field_groups_label',
+                    'commentAbove' => 'riuson.blogfrontend::lang.backend.field_groups_comment_above',
+                    'tab' => 'riuson.blogfrontend::lang.backend.field_groups_tab_name',
                     'type' => 'relation'
                 ]
             ], 'primary');

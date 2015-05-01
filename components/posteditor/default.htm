@@ -5,5 +5,5 @@
 	data-request-update="'{{ __SELF__ }}::post_form': '#form_post'"
 >{% partial __SELF__ ~"::post_form" %}</form>
 {% else %}
-Only author can edit this post.
+{{ 'riuson.blogfrontend::lang.post_editor.error_editing_forbidden'|trans }}
 {% endif %}

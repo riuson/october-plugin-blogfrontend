@@ -10,8 +10,8 @@ class PostsViewer extends \RainLab\Blog\Components\Posts
     public function componentDetails()
     {
         return [
-            'name' => 'Posts Viewer',
-            'description' => 'Posts list viewer for frontend'
+            'name' => 'riuson.blogfrontend::lang.posts_viewer.name',
+            'description' => 'riuson.blogfrontend::lang.posts_viewer.description'
         ];
     }
 
@@ -19,13 +19,13 @@ class PostsViewer extends \RainLab\Blog\Components\Posts
     {
         $result = parent::defineProperties();
         $result['showPager'] = [
-            'description' => 'Show page navigation',
-            'title' => 'Show pager',
+            'title' => 'riuson.blogfrontend::lang.posts_viewer.showpager_title',
+            'description' => 'riuson.blogfrontend::lang.posts_viewer.showpager_description',
             'type' => 'dropdown',
             'default' => 'hide',
             'options' => [
-                'hide' => 'Hide navigation',
-                'show' => 'Show navigation'
+                'hide' => 'riuson.blogfrontend::lang.posts_viewer.showpager_option_hide',
+                'show' => 'riuson.blogfrontend::lang.posts_viewer.showpager_option_show'
             ]
         ];
         return $result;
